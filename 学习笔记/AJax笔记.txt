@@ -1,0 +1,77 @@
+JS-创建ajax对象
+	var xhr = new XMLHttpRequest();
+	//设置ajax事件，便于接受返回值
+	xhr.onreadystatechange = function(){ //每次ajax请求的状态改变时，触发是事件
+		if(xhr.readyState == 4){  //“4”代表请求成功并完成
+			alert(xhr.responseText);  //xhr.responseText是ajax请求后得到的结果，也就是php文件的返回值
+		}
+	}
+	//设置ajax发送类型和请求服务器的文件
+	xhr.open("post","./04.php?&age=13?"+Math.random());  //保证每次请求的地址都不一样
+	//发送ajax请求
+	xhr.send(str);
+	
+服务器请求类型
+	POST ： xhr.open("请求类型","请求的php文件",同步和异步的开关true(异步)/flase(同步));
+			xhr.send("需要推送给php处理的信息，可以是字符串，或者数组，对象等");
+	GET : 	xhr.open("请求类型","请求的php文件?后面跟上发送的信息",同步和异步的开关true(异步)/flase(同步));
+			xhr.send(null，需要发送的信息已在open中);
+			
+ajax获取表单数据
+	//将id="fm"的form表单上的信息，读取出来，直接是可以提交的格式
+	var fd = new FormData($("#fm")[0]);
+	xhr.onreadystatechange = function(){ //每次ajax请求的状态改变时，触发是事件
+		if(xhr.readyState == 4){  //“4”代表请求成功并完成
+			alert(xhr.responseText);  //xhr.responseText是ajax请求后得到的结果，也就是php文件的返回值
+		}
+	}
+	//设置ajax发送类型和请求服务器的文件
+	xhr.open("post","./04.php?&age=13?"+Math.random());  //保证每次请求的地址都不一样
+	//发送ajax请求
+	xhr.send(fd);
+
+ajax上传大文件设置
+	打开php.ini，首先找到
+	file_uploads = on ;  是否允许通过HTTP上传文件的开关。默认为ON即是开
+	upload_tmp_dir ;  文件上传至服务器上存储临时文件的地方，如果没指定就会用系统默认的临时文件夹
+	upload_max_filesize = 500m ;  望文生意，即允许上传文件大小的最大值。默认为2M
+	post_max_size = 500m ;  指通过表单POST给PHP的所能接收的最大值，包括表单里的所有值。
+	
+	//ajax设置大文件上传事件
+		xhr.upload.onprogress = function(evt){  //ajax上传过程时间，每0.1秒请求一次上传进度
+			console.log(evt);
+			var loaded = evt.loaded;  //已上传的大小
+			var total = evt.total;    //文件总大小
+			var per = Math.floor((loaded/total)*100)+"%";  //计算已上传百分比
+			
+			//将百分比数据，赋值在页面中
+			$("#d2").css("width",per);
+			$("#s1").html(per);
+		}
+	
+ajax对JSON格式的获取
+	//ajax去请求接收json信息
+	//js做后期处理
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState==4){
+			//eval()将文本内容变成代码运行
+			//把接收的字符串json变为 具体object 的json信息
+			eval("var jn_info="+xhr.responseText);
+			//jn_info已经成为json数据的对象
+			console.log(jn_info);
+			console.log(jn_info.city);//北京
+			console.log(jn_info.WD);//西南风
+			console.log(jn_info.temp);//9
+		}
+	}
+	//设置ajax发送类型和请求服务器的文件
+	//发送ajax请求
+	xhr.send(fd);
+	
+
+	
+	
+	
+	
+	

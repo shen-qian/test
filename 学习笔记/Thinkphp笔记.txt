@@ -1,0 +1,478 @@
+php运行模式？
+
+
+下一阶段学习的框架是：
+	2.Symfony（市场最流行的框架，对大型开发很有用），
+	3.Laravel（新崛起的框架，受到市场的极度欢迎），
+	1.CodeIngiter（一款适合小型项目的框架，特点“简单就是美”）
+	
+部署Thinkphp3
+	1.下载，解压
+	2.解压后，把Thinkphp文件和index.php放入项目中（比如，"obj"Web项目下）
+	3.配置Apache站点，根目录设置到"Obj"文件项目下
+	4.访问配置好的站点，成功后会在项目内自动生成"Application"文件夹
+	5.项目的MVC模式都会在Application文件夹下创建
+	6.Application
+		->平台文件夹（一个网站、系统的不同角色的操作系统分类编写）
+		->控制器文件夹（"MVC"中的"C"），视图文件夹（"MVC"中的"V"），模型文件夹（"MVC"中的"M"），以及"Conf(配置文件)","Comme"
+
+------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
+		
+Thinkphp控制器命名规范
+	控制器名（首字母大写）+Controller（关键词）+.class.php
+	例子：TestController.class.php
+	
+Thinkphp控制器编写内容规范
+	1.声明当前控制器的命名空间 -- namespace Admin（所属的平台文件夹）\Controller
+	2.引入父类控制器 -- use Think\Controller
+	3.声明控制器并继承父类 -- class TestController extends Controller{}
+	4.定义控制器的方法 -- public function test(){}
+	
+Thinkphp路由格式 
+	*影响URL组装函数（U函数）路由方式，可以在Thinkphp文件夹下的Conf下的convention.php下，找到'URL_MODEL'设置
+	1.http://网址/入库文件?m=分组名&c=控制器名&a=方法名&参数名=参数值
+	  http://1006.com/index.php?m=Home&c=User&a=test&id=1
+	2.http://网址/入口文件/分组名/控制器名/方法/参数名1/参数值1/参数名2/参数值2
+	  http://1006.com/index.php/Home/User/test/id/100
+	3.http://网址/入口文件?s=/分组名/控制器名/方法名/参数名1/参数值1
+	  http://1006.com/index.php?s=/Home/User/test/id/10086
+	
+Thinkphp控制器跳转（U函数）
+	U语法格式：U(‘URL路径’,参数数组);
+	
+	U(‘index’);（使用U方法组装出当前控制器下index方法地址）
+	U(‘Admin/Test/index’);（使用U方法指定平台Admin中的控制器Test的index方法地址）
+	U(‘Index/index’,array(‘id’ => 100));（给指定的页面添加参数，id=100）
+	
+	*视图中调用U函数：{:U('index')}
+	
+Thinkphp系统跳转方法	
+	成功：$this -> success(跳转提示,跳转地址,等待时间-秒);
+		  $this -> success("你访问成功",U('index'),5);
+	失败：$this -> error(跳转提示,跳转地址,等待时间);
+		  $this -> error("你访问失败",U('Test/index'),5);
+		
+------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
+		
+ThinkPHP中的视图
+	1.命名最好和控制器内的方法名一致
+	2.在控制器方法中调用访问页面
+	3.css、js、img这类视图的资源，存放在项目下的Public文件夹中相应平台文件目录下
+
+ThinkPHP视图的访问方式
+	class TestController extends Controller{
+		public function test(){
+			$this -> display(); -- 展示当前控制器下与当前请求方法名称一致的模版文件，展示test.html
+			$this -> display('test1（视图文件名）'); -- 展示当前控制器下的指定模版文件，展示test1.html
+			$this -> display('Test/test2'); -- 展示指定控制器目录下的指定模版文件，展示View中Test目录下的test2.html
+		}
+	}
+	
+ThinkPHP变量分配、对象分配
+	$this -> assign(‘模版中变量名/对象名’,$php中的变量名/对象名);
+	例子：php中定义 变量$time1 -> $this->assign('time2',$time1) 
+	
+	*变量在html中的输出格式：{$time2}
+	
+	*数组变量在html中的输出格式：{$array[key]} or {$array.key}
+	 二维数组：{$array[key2][key1]} or {$array.key2.key1}
+	 
+	*对象在html中的输出格式：{$obj->name} or {$obj:name}
+	
+ThinkPHP变量分隔符
+	默认是：'{'和'}'
+	配置文件：Thinkphp目录 -> Conf目录 -> convention.php -> 找到'TMPL_L_DELIM'和'TMPL_R_DELIM'
+	
+ThinkPHP中的系统变量：
+	$Think.server	等价于$_SERVER，获取服务器的相关信息
+	$Think.get		等价于$_GET，获取get请求的信息
+	$Think.post	    等价于$_POST，获取post请求中的信息
+	$Think.request	等价于$_REQUEST，获取get和post中信息
+	$Think.cookie	等价于$_COOKIE，获取cookie中的信息
+	$Think.session	等价于$_SESSION，获取session中的信息
+	$Think.config	获取ThinkPHP中所有配置文件的一个总和，如果后面指定了元素，则获取指定的配置
+
+	*使用格式：{$Think.xxx.具体的元素下标}
+
+ThinkPHP视图中使用函数：
+	{$变量|函数名1|函数名2=参数1,参数2,###…} -- ###：表示变量的自身（$变量）
+	
+ThinkPHP中变量设置默认值：
+	{$变量名|default=默认值}
+	
+ThinkPHP中变量预算符
+	{$a+$b}		计算变量a加上变量b的结果
+	{$a-$b}		计算变量a减去变量b的结果
+	{$a*$b}		计算变量a乘以变量b的结果
+	{$a/$b}		计算变量a除以变量b的结果
+	{$a%$b}		计算变量a除以变量b的余数
+	{$a++}  	自增运算，先输出，后+1
+	{++$a}		自增运算，先+1，后输出
+	{$a--}  	自减运算，先输出，后-1
+	{--$a}		自减运算，先-1，后输出
+
+------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------	
+
+ThinkPHP路径模板定义
+	配置文件：Thinkphp目录 -> Library目录 -> Behavior目录 -> ContentReplaceBehavior.class.php
+			  -> 找到'templateContentReplace'方法
+	
+	__ROOT__：
+	__APP__：/index.php
+	__MODULE__：/index.php/Admin
+	__ACTION__：/index.php/Admin/Test/test
+	__SELF__：/index.php/Admin/Test/test
+	__CONTROLLER__：/index.php/Admin/Test
+	__URL__：/index.php/Admin/Test
+	__PUBLIC__：/Public
+	
+------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
+
+ThinkPHP中视图中注释（模板注释）：
+	行注释：{//行注释内容}
+	块注释：{/*块注释内容*/} 
+	html注释：<!--注释内容-->
+	
+	*注意：“行注释”和“块注释”都不会再网页的源码中找到，“html注释”会在源码中显示
+	
+ThinkPHP视图中导入其他视图文件：-- 主要应用在导入页面几个固定div模块
+	<include file=’引入文件（路径可以是相对路径，但是相对于入口文件的）’ />
+	简单：<include file=’View的目录名/模版文件名’ />
+	
+	*对导入文件夹参数：<include file=’需要引入的模版文件’ 参数名=’参数值’ />
+	 导入文件参数使用格式：[参数名]
+	 
+ThinkPHP视图中循环遍历：
+	<volist name='数组名（arr）' id='不与数组名重复，等于数组中的一个变量（value）'>
+		$value为数组的一个元素，可以是变量也可以是数组
+	</volist>
+	
+ThinkPHP视图中if标签：
+	<if condition=’条件表达式’>
+	输出结果1
+	<elseif condition=’条件表达式2’/>
+	输出结果2
+	<elseif condition=’条件表达式3’/>
+	…
+	<else/>
+	最后一个输出
+	</if>
+
+------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
+
+ThinkPHP数据库配置：
+	将下列代码，移至平台目录 -> Conf目录 -> config.php配置文件
+	代码来源：ThinkPHP目录 -> Conf目录 -> convention.php配置文件
+	
+	'DB_TYPE'               =>  'mysql',     // 数据库类型
+    'DB_HOST'               =>  'localhost', // 服务器地址
+    'DB_NAME'               =>  'b1',          // 数据库名
+    'DB_USER'               =>  'root',      // 用户名
+    'DB_PWD'                =>  '123456',          // 密码
+    'DB_PORT'               =>  '3306',        // 端口
+    'DB_PREFIX'             =>  'shen_',    // 数据库表前缀
+	
+ThinkPHP模型命名规范：
+	模型名（要求是不带前缀的表名并且首字母大写）+Model关键词+.class.php
+	
+ThinkPHP模型内容编写规范：
+	//声明命名空间
+	namespace Admin\Model;
+	//引用父类模型
+	use Think\Model;
+	//声明模型，并继承父类模型
+	class StudentsModel extends Model{
+		自定义与数据库交互的方法
+	}
+	
+ThinkPHP模型实例化
+	普通：$obj = new 类名();
+	实例化方法：
+		1.$obj = D([‘模型名’]); -- 实例化我们自己创建的模型（分组/Model目录中）
+		2.$obj = M([‘不带前缀的表名’]); -- 直接实例化父类模型（Think目录下的Model.class.php）
+		*实例化方法使用注意：可以直接实例化父类（使用M方法），
+							 如果父类中方法不能满足我们的开发需要求，再自己定义方法（使用D方法）
+	
+ThinkPHP控制器调用模型：
+	//实例化模型，父类模型可以满足操作直接调用，有特殊需求再调用自定义模型
+	$model = M('students');
+	//调用父类模型方法
+	CURD操作
+	
+ThinkPHP数据库CURD操作：
+	1.增加操作：
+	$data = array(
+				array('name'=>'说得好','class'=>3,'socre'=>88),
+				array('name'=>'沈乾','class'=>6,'socre'=>8),
+				array('name'=>'朝明','class'=>3,'socre'=>58),
+			);
+	//调用模型的数据增加方法，add(数组)
+	foreach($data as $val){
+		$result = $model->add($val);
+	}
+	
+	2.修改操作：
+	$data = array(
+				'id'=>3,
+				'name'=>'三角地'
+				'class'=>'1'
+			);
+	//调用父类模型的修改方法
+	$result = $model->save($data);
+	
+	3.查询操作：
+	//调用父类模型的查询方法
+	$result1 = $model->select('1,3,38'); -- 查询 主键=1/3/38 的数据
+	$result2 = $model->find(42); -- 发现 主键=48 的数据
+	$result3 = $model->select(); -- 查询所有数据
+	$result4 = $model->find(); -- 发现一个数据（第1个）
+	$result5 = $model->select('38'); -- 查询 主键=38 的数据	
+	*注意：select()查询到的数据，以数组形式输出
+	
+	4.删除操作：
+	//调用父类模型的删除方法
+	$model -> delete(); -- 不能使用，删除方法必须要有条件，不能执行没有条件的删除
+	$model -> delete(id); -- 删除指定id对应的记录
+	$model -> delete(‘id1,id2,id3….’); -- 删除多个id对应的记录	
+
+ThinkPHP数据库AR模式：
+	//实例化模型
+	$model = M(关联的表);
+	//字段映射到属性
+	$model -> 属性/表中字段 = 字段值;
+	$model -> 属性/表中字段 = 字段值;
+	…
+	//AR实例（操作）映射到表中记录
+	$model -> CURD操作;	CURD操作没有参数
+	
+	例子：
+	//第一步：实例化模型
+	$model = M('students');
+	//第二步：属性映射到字段
+	$model -> name = '玉溪市';
+	$model -> class = '5';
+	$model -> score = '77';
+	//第三步：实例映射记录
+	$result = $model -> add();
+	
+	*删除和修改需要确定主键，
+	*AR模式会记录查询主键
+	//第一步：实例化模型
+	$model = M('students');
+	//第二步：查询某条记录
+	$model -> select('6');
+	//第三步：删除该条记录
+	$result = $model -> delete();
+
+ThinkPHP数据库条件、限制语句：
+	where		表示限制查询的条件 -- $model -> where(条件表达式);
+	limit		表示限制输出的条数 -- $model -> limit(n); $model -> limit(起始位置,偏移量/长度);
+	field		表示限制输出的字段 -- $model -> field(‘字段1,字段2,字段3,字段4 as 别名….’);
+	order		表示按照指定的字段进行指定的排序 -- $model -> order(‘字段名 asc（升序）/desc（降序）’);
+	group		表示按照指定的字段进行分组查询 -- $model -> group(‘字段名’);
+
+ThinkPHP数据库统计查询：
+	count()		表示查询表中满足条件总的记录数 -- $model -> count();
+	max() 		表示查询某个字段的最大值 -- $model -> max('字段');
+	min()		表示查询某个字段的最小值 -- $model -> min('字段');
+	avg()		表示查询某个字段的平均值 -- $model -> avg('字段');
+	sum()		表示求出某个字段的总和 -- $model -> sum('字段');
+
+ThinkPHP数据库语句的检查、打印：
+	$model -> fetchSql(true);
+	
+ThinkPHP数据库连贯操作：
+	$model -> where() -> limit() -> order -> field() -> count() -> fetchSql(true) -> select();
+	*要点：CURD操作方法必须放最后一个，其他方法没有顺序
+
+
+------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------	
+	
+ThinkPHP跟踪信息：
+	在平台目录下 -> Conf目录 -> Config.php  ,加入跟踪信息开关的代码:SHOW_PAGE_TRACE => true/failse
+
+ThinkPHP的开发模式、生产模式：
+	在项目下的默认文件中：define('APP_DEBUG',True); true（为开发模式）
+	
+ThinkPHP的性能调试：
+	G(‘开始标记’);
+	需要统计效率的代码段
+	……
+	G(‘结束标记’);
+	G(‘开始标记’,’结束标记’,数字/字符m); （参数为数字表示计时，参数为字符m表示计算内存开销）
+
+ThinkPHP提交表单处理：
+	1.判断接收的类型
+		*IS_POST		如果请求是post，则IS_POST的值是true，否则是false
+		*IS_GET			如果请求是get，则IS_POST的值是true，否则是false
+		*IS_AJAX      	如果请求是ajax，则IS_AJAX的值是true，否则是false	
+		IS_CGI
+		IS_PUT
+	
+	2.接收数据
+		I('变量类型.变量名',['默认值'],['过滤方法'],['额外数据源']);
+		$post = I('post.'); or $post = I('post.id');
+		*注意：$post接收到的数据就是一个数组
+
+ThinkPHP数据对象：另一种表单处理方式
+	$model -> create($data); -- 调用模型方法，参数$data可以是数组，也可以是对象
+	*如果参数不写，则create()方法默认以提交的POTS数据为参数
+	$model->add(); -- 创建完数组对象，可以直接进行CURD操作
+	
+ThinkPHP数据自动验证：
+	1.自动验证方法 "protected $_validate = array();" 在 ThinkPHP\ThinkPHP\Library\Think\Model.class.php 文件下
+	
+	2.创建一个模型类
+	
+	3.把验证方法放入自定义模型了中重写，一个验证字段为一个数组，重写规则可以查看手册
+	protected $_validate = array(     
+									array(验证字段1,验证规则,错误提示,[验证条件,附加规则,验证时间]),     
+									array(验证字段2,验证规则,错误提示,[验证条件,附加规则,验证时间]),     
+									......
+								);
+								
+	*在自定义模型中要去关联表，protected $trueTableName = '需要关联的完整表名';
+	
+	4.实例化自定义模型，$model = D('模型名');
+	
+	5.自动验证如果失败 $data = $model->create(); 会返回false
+	
+	6.需要用getError方法获取到验证失败的提示，$this->error($model->getError());
+	
+	*在 ThinkPHP\ThinkPHP\Library\Think\Model.class.php 文件下，找到 patchValidate 设置成 true，可以批量验证
+	
+ThinkPHP字段映射：
+	*create()方法在提取表单数据是会自动跟数据字段匹配，但是这样不安全，需要用字段映射伪装页面的表单数据名
+	
+	1.在 ThinkPHP\ThinkPHP\Library\Think\Model.class.php 文件下，找到 “protected $_map = array();”
+	
+	2.创建一个模型类
+	
+	3.把验证方法放入自定义模型了中重写
+	protected $_map = array(
+								'abc' => 'name',
+								'was' => 'order',
+								'伪装名' => '真实字段名',
+							);
+							
+	4.表单的数据名称就可以使用伪装名
+	
+ThinkPHP数据持久化：
+	1.session方法
+		session(‘name’,’value’)	 		创建一个名为name的session值，值是value
+		$value = session(‘name’)	 	读取session中的name元素值，值赋给value
+		session(‘name’,null)			删除名为name元素的值
+		session(null)					删除全部的session元素
+		session()						读取全部的session信息
+		session(‘?name’)				判断名为name的session元素是否存在，如果存在则返回true，如果不存在，则返回false。
+
+	2.cookie方法
+		cookie(‘name’,’value’)			设置一个名为name的cookie值，值是value
+		cookie(‘name’,’value’,3600)		设置一个名为name的cookie值，值是value，有效期是3600s
+		$value = cookie(‘name’)			读取名为name的cookie赋值给value
+		cookie(‘name’,null)				删除名为name的cookie值
+		cookie(null)					删除全部的cookie（有问题）
+		cookie()						获取全部的cookie
+		
+	*Thinkphp中cookie(null);方法其实没有办法实现，需要手动修改底层代码内容：
+		1.在C:\Users\shen\Documents\HBuilderProject\ThinkPHP\ThinkPHP\Common\functions.php中
+		
+		2.找到function cookie()方法
+		
+		3.替换代码，位置大概在1370-1380行
+        $prefix = empty($value) ? $config['prefix'] : $value;
+        if (!empty($prefix) || $name == null) {// 如果前缀为空字符串将不作处理直接返回
+            foreach ($_COOKIE as $key => $val) {
+                if (0 === stripos($key, $prefix) || $name == null) {
+                    setcookie($key, '', time() - 3600, $config['path'], $config['domain'],$config['secure'],$config['httponly']);
+                    unset($_COOKIE[$key]);
+                }
+            }
+        }
+
+------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
+		
+Thinkphp文件加载：
+	1.函数库形式：
+		在common目录下 -> 创建 -> function.php -> 其中定义的方法可以直接在当前组内的控制器中直接调用
+		
+	2.通过配置项动态加载
+	
+	3.通过load方法加载
+	
+Thinkphp验证码功能：
+	1.引入父类模型，use Think\Verify;
+	
+	2.重写模型配置项：在 ThinkPHP\ThinkPHP\Library\Think\Verify.class.php 中导出需要重写的配置项
+	$cfg = array(
+					'fontSize'  =>  12,              // 验证码字体大小(px)
+					'useCurve'  =>  false,            // 是否画混淆曲线
+					'useNoise'  =>  false,            // 是否添加杂点	
+					'length'    =>  4,               // 验证码位数
+					'imageH'    =>  50,               // 验证码图片高度
+					'imageW'    =>  0,               // 验证码图片宽度
+					.....
+				);
+				
+	3.实例化模型，$verify = new Verify;
+	
+	4.调用模型方法：
+		1.生产验证码，$Verify->entry();
+		2.检查验证正确，$verify->check('用户输入的验证码');
+	
+	*补充：验证码功能需要在 php.ini 文件中 开启两个模块：extension=php_mbstring.dll 和 extension=php_curl.dll
+	
+------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
+	
+Thinkphp编程注意事项：
+	1.在静态资源页面css，js，任何的路径格式都无效，只能写访问的全路径（就是浏览器输入什么这里就输入什么）
+	2.在视图中写<if>语句是，符号直接都要有空格 -- <if condition=' $val.id == $data.id '>
+	3.
+	
+------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
+	
+系统实现复选框批量删除：
+	1.创建带有值的复选框
+		<input type='checkbox' value='{$data.id}'>
+		
+	2.运用jq取出选中的复选框值：
+		var obj = $(:checkbox:checked);  //获取选中的CheckBox，对象形式
+		var id = "";  //定义字符串变量id
+		//循环遍历对象，将id转成合适的字符串变量格式
+		for(var i=0;i<obj.length;i++){
+			id += obj['i']+',';
+		}
+		//提取最后一个逗号钱的字符串，去掉最后一个多出来的逗号
+		id = id.substring(0,id.length-1);
+		//带着id参数跳转到delete方法
+		window.location.href = '__CONTROLLER__/delete/id/' + id;
+		
+	3.在控制器中删除
+		//获取视图上传的$id变量
+		$id = I('get.id');
+		//删除
+		$model->delete($id);
+		
+系统实现数据分页功能：
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
