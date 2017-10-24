@@ -1,0 +1,219 @@
+
+核心：
+	JQ语法：$(select).action()
+	console.log:控制台日志
+
+选择器：
+	#id:id选择器 //$("#id")
+	Element：元素选择器
+	Class：类选择器
+
+	parent>child:选择parent元素的子元素 //$("div>a")
+	selecter+：获取后面的兄弟元素，下一个
+	selecter~：后去后面的兄弟元素，下所有个
+
+内容选择器：
+	:Contains(“text”)：匹配含有text内容的元素 //$("p:Contains("text")")
+	:empty：匹配内容为空的元素
+	:has(selecter)：选择包含有selecter的选择器
+	:parent:选择作为父元素的元素
+
+基本选择器：
+	:first：第一个子元素 //$("li:first")
+	:last：最后一个元素
+	:even：下标偶数元素:0也是偶数
+	:odd：奇数元素
+	:eq(index)：获取指定索引位置的元素
+	:gt(index)：查找大于index索引的元素
+	:lt(index)：查找小于index索引的元素
+	:header：找h标签元素
+	:not（select）：表示选择是出去select元素
+
+属性选择器：
+	[Attribute]：属性选择为attribute //$("img[src]")
+	[arttribute=”value”]，查找属性为value的元素
+	[attribute!=’value’]查找属性不为value的元素
+	[attribute^=‘value’]查找以value为开头的属性
+	[attribute$=”value”]查找以value为结尾的属性
+	[attribute*=“value”]查找以包含value的属性
+	
+Type阵营，childe阵营
+	:first-child：找第一个子元素 //$("li:first-child")
+	:first-of-type：找第一个子元素
+	:last-child：找最后一个子元素
+	:last-of-type：找最后一个子元素
+	:nth-child（n）:找到第n个子元素
+	:nth-of-tyoe(n):找到第n个子元素
+	:nth-last-child(n):找到倒数第n个子元素
+	:nth-last-of-type(n)：找到倒数第n个子元素
+
+表单选择器：
+	:input：找到input元素 //$(":input")
+	:text：找到text元素
+
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+
+属性和方法的操作：
+	Attr：属性，元素.attr();获取属性
+	Attr(attr,vlaue)：设置属性    //$("input").attr("value","123abc")
+	Attr({value:“zhi”，tpye：“zhi”})设置多个属性的方法
+	Attr(“key”，”fn接受函数的返回值”)：通过函数的返回值设置属性
+	removeAttr(name)：删除name属性
+
+Css类：
+	addClass（className）添加类：   //$("div").addclass("d1")
+	removeClass(className１ className2……)删除类
+	toggleClass(className)：切换类：如果没有就添加如果有就删除
+
+HTML代码
+	Html()：获取的是对象内的html代码【innerHTML】
+	Html（daima）：设置html的内容:识别标签的    //$("div").html("<b>加粗</b>")
+	
+Text内容：
+	Text():获取元素中的文本内容【innerText】
+	Text(daima)：设置元素的文本内容:       //$("div").text("<b>加粗</b>")
+
+Val值：
+	Input里面的value
+	Val()：获取value值
+	Var(zhi)：设置value值   //$("input").val("123abc")
+	
+对象访问：
+	Length:个数
+	Size()：个数   //$("p").size()  <p>标签的个数
+	
+Each:遍历
+	用法：元素.each(function (index,element){})
+	Index：索引下标：从0开始
+	Element：元素
+	//$("div").each(function(n,div)){
+		$(this).html("这是第"+n+"个标签")
+	  }
+	  
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+
+DOM：文档处理
+
+内部插入：父子级关系
+	$(a).Append（$(b)）把b插入到a中【a里面的后面】   //$("div").append($("<p>段落</p>"))
+	$(b).appendTo($(a))把b插入到a中【a里面的后面】
+	$(a).prepend($(b));把b插入到a中【a里面的前面】
+	$(b).prependTo($(a));把b插入到a中【a里面的前面】
+
+外部插入：兄弟级关系
+	$(a).after($(b))；把b插入到a的后面     //$("p").after($("<a>连接</a>"))
+	$(b).insertAfter($(a));把b插入到a的后面
+	$(a).before($b);吧b插入到a的前面
+	$(b).insertBefore($(a))把b插入到a的前面 
+
+包裹：
+	Wrap：包裹$(a).wrap($(b))把a用b包裹起来【每个元素都会包裹】   //$("p").wrap($("<div></div>"))
+	Unwrap：取消包裹
+	wraoAll:把所有的都包裹起来【所有元素都会被一个包裹】
+	wrapInner:内部包裹
+	
+替换：
+	$(a).ReplaceWith($(b)):把a用b替换     //$("p").replaceWith("div")
+	$(b).replaceAll($(a));用b替换a
+
+删除：
+	Empty：删除:删除的是内容    //$("div").empty()
+	Remove：删除:删除的是整个标签
+
+复制：
+	Clone：复制出一个一模一样的元素     //$("a").clone().appendTo("div")
+
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+
+事件：
+	$(document),$(body)
+
+加载事件：
+	$(document).Ready(fn),简写：$(function (){})    //$(function(){alert("时间触发")})
+	
+事件切换：
+	Hover(houver,out)：鼠标悬放和离开时间     
+	//$("div").hover(function(){$("div").html("鼠标在标签内")},function(){$("div").html("鼠标离开了")})
+
+事件：
+	$(selector).click(fn):selector的点击事件，会触发fn    //$("button").click(function(){...})
+	$(selector).dblckick(fn);双击事件
+	$(selector).focus();获得焦点触发的事件
+	$(selector).blur()；失去焦点
+	$(selector).change();发生改变
+	$(selector).mouseover;鼠标放上【悬浮】
+	$(selector).mouseout;鼠标离开
+	$(selector).mousedown；鼠标按下
+	$(selector).mouseup；鼠标抬起
+	$(selecror).mousemove；鼠标移动
+
+事件处理：
+
+Bind：绑定事件
+	Bind（“action”，fn）所有版本都支持的   //$("button").bind("click",function(){...})
+如果多个事件：
+	Bind({“mouseover”:fn1,”mouseout”:fu2})；
+	
+解除事件绑定：
+	Unbind(“action”)解除绑定，如果没有参数，意味着，全部解除绑定
+
+On: 绑定事件
+	$(select).on(“click”,function(){});    //$("button").on("click",function(){})
+Off：解绑
+	$(select),off()
+
+one: 只触发一次事件
+	$(select).one(“click”,function(){});
+	
+查找：
+	$(selector).Parent（）,查找父元素      //$("a").parent()
+	$(selector).find(a);在selector中找a元素
+
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+	
+动画：
+	Show(时间，fn)（显示）【在效果完成之后，会执行fn】   //$("div").show("6000",function(){...})
+	Hide(时间，fn)（隐藏）【在效果完成之后，会执行fn】
+	Toggle()：切换【show和hide之间】
+
+滑动：
+	slideDown(时间，fn):下滑,显示    //$("div").slideDown("6000",function(){...})
+	slideUp(时间，fn):收起，隐藏
+	slideToggle：切换效果
+
+淡入淡出：
+	FadeIn(时间，fn)：淡入
+	fadeOut(时间，fn)：淡出
+	fadeToggle：切换效果
+	fadeTo(时间,透明度(0-1),fn())      //$("div").fadeTo("3000",0.3,function(){...})
+
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+
+获取table下的，最后一个tr的属性：
+	var id = $("#table-contact tr:last").attr("id");
+	
+遍历table的td：
+	$("#history_income_list").find("tr").each(function(){
+		var tdArr = $(this).children();
+		var history_income_type = tdArr.eq(0).find("input").val();//收入类别
+		var history_income_money = tdArr.eq(1).find("input").val();//收入金额
+		var history_income_remark = tdArr.eq(2).find("input").val();//收入备注
+		 
+		alert(history_income_type);
+		alert(history_income_money);
+		alert(history_income_remark);
+		 
+		 
+	});
+
+
+
+
+
+
+	
